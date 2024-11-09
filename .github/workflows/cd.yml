@@ -1,12 +1,8 @@
 name: Publish Releases to GitHub Container Registry
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    branches:
-      - main
-    types:
-      - completed
+  on:
+    push:
   workflow_dispatch:
 
 env:
