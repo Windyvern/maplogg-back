@@ -1,9 +1,10 @@
 name: Publish Releases to GitHub Container Registry
 
 on:
-  on:
-    push:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 env:
   REGISTRY: ghcr.io
