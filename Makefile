@@ -35,3 +35,6 @@ docker-run: docker-build
 		-e DATABASE_FILENAME=$(DATABASE_FILENAME) \
 		-e JWT_SECRET=$(JWT_SECRET) \
 		$(REPOSITORY)/$(TARGET):$(DOCKERTAG)
+
+deploy:
+	ansible-playbook deployments/ansible/deploy.yml -vv 
