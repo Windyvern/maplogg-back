@@ -7,7 +7,8 @@
     exposed_port: "10749"
     image: "{{ repository }}/reidaa/kajibi-strapi:latest"
     repository: ghcr.io
-    service_name: kajibi_strapi
+    service_name: kajiback
+    DOMAIN: kokuban.dev
   tasks:
     - name: Log into private registry and force re-authorization
       community.docker.docker_login:
@@ -23,7 +24,7 @@
           6133306463623136323065663165646539613132633063336262
         reauthorize: true
 
-    - name: "Deploy {{ service_name }}"
+    - name: "Create a kajibi-strapi container"
       become: true
       community.docker.docker_container:
         name: "{{ service_name }}"
@@ -103,3 +104,7 @@
             33333534643463396361353839613432626236326131643839623835316666363231
         security_opts:
           - "no-new-privileges:true"
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.kajiback.rule: Host(`{{ service_name }}.{{ DOMAIN }}`)
+          traefik.http.routers.kajiback.entrypoints: "websecure"
