@@ -108,3 +108,4 @@
           traefik.enable: "true"
           traefik.http.routers.kajiback.rule: Host(`{{ service_name }}.{{ DOMAIN }}`)
           traefik.http.routers.kajiback.entrypoints: "websecure"
+          com.centurylinklabs.watchtower.enable: "true"
