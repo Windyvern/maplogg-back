@@ -1,61 +1,87 @@
-# 🚀 Getting started with Strapi
+# Maplogg Backend
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Backend API for a map‑based article system built with [Strapi 5](https://strapi.io/). It stores articles along with geolocation metadata so a frontend can render them on an interactive map.
 
-### `develop`
+## Prerequisites
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+- [Node.js](https://nodejs.org/) 18.x and npm 6+
+- Git
+- (optional) [Docker](https://www.docker.com/) and GNU Make for container workflows
 
-```
-npm run develop
-# or
-yarn develop
-```
+Start by copying the environment template and filling in the required secrets:
 
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
+```bash
+cp .env.example .env
+# Edit .env to provide APP_KEYS, API_TOKEN_SALT, ADMIN_JWT_SECRET, TRANSFER_TOKEN_SALT,
+# and database configuration.
 ```
 
-### `build`
+## Install & Run
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the Strapi server in development mode:
+   ```bash
+   npm run develop
+   ```
+   The API is served at `http://localhost:1337`.
+3. (Optional) Build and run for production:
+   ```bash
+   npm run build
+   npm start
+   ```
 
+## Seeding Example Content
+
+Seed scripts populate the database with authors, categories, articles, and default settings:
+
+```bash
+npm run seed:example
 ```
-npm run build
-# or
-yarn build
+
+The script is idempotent and will only import data on the first run unless the database is cleared.
+
+## Docker & Makefile Workflow
+
+To build and run the project inside a container, ensure Docker is installed and `.env` contains the desired configuration.
+
+```bash
+# Build image
+make docker-build
+
+# Run container using variables from .env
+make docker-run
 ```
 
-## ⚙️ Deployment
+Equivalent Docker commands are:
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
+```bash
+docker build -f Dockerfile -t <repository>/scrapi:latest .
+docker run --rm -P --env-file .env <repository>/scrapi:latest
 ```
-yarn strapi deploy
-```
 
-## 📚 Learn more
+## Consuming the API from the Frontend
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+The frontend communicates with the backend using Strapi's REST API:
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+- List articles with related data:
+  `GET /api/articles?populate=cover,author,category`
+- Fetch a single article by slug:
+  `GET /api/articles?filters[slug][$eq]=my-article&populate=*`
+- Each article can include geospatial fields (e.g. `latitude` and `longitude`) allowing the frontend to plot map markers.
 
-## ✨ Community
+Responses follow the [Strapi REST conventions](https://docs.strapi.io/dev-docs/api/rest).
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+## Directory Overview
 
----
+- `config/` – application configuration (database, server, plugins)
+- `src/api/` – content type schemas, controllers, and services
+- `scripts/seed.js` – seed logic for importing example data
+- `Makefile` – helper targets for Docker builds and runs
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## License
+
+This project is released under the MIT license.
+

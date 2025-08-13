@@ -3,6 +3,8 @@ FROM node:20-alpine AS build
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev git > /dev/null 2>&1
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+ARG FRONTEND_URL
+ENV FRONTEND_URL=${FRONTEND_URL}
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/
@@ -17,6 +19,8 @@ RUN npm run build
 FROM node:20-alpine
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+ARG FRONTEND_URL
+ENV FRONTEND_URL=${FRONTEND_URL}
 ENV PATH=/opt/node_modules/.bin:$PATH
 
 RUN apk add --no-cache vips-dev
