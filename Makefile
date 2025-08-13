@@ -30,11 +30,12 @@ docker-run: docker-build
 		-e DATABASE_PORT=$(DATABASE_PORT) \
 		-e DATABASE_NAME=$(DATABASE_NAME) \
 		-e DATABASE_USERNAME=$(DATABASE_USERNAME) \
-		-e DATABASE_PASSWORD=$(DATABASE_PASSWORD) \
-		-e DATABASE_SSL=$(DATABASE_SSL) \
-		-e DATABASE_FILENAME=$(DATABASE_FILENAME) \
-		-e JWT_SECRET=$(JWT_SECRET) \
-		$(REPOSITORY)/$(TARGET):$(DOCKERTAG)
+                -e DATABASE_PASSWORD=$(DATABASE_PASSWORD) \
+                -e DATABASE_SSL=$(DATABASE_SSL) \
+                -e DATABASE_FILENAME=$(DATABASE_FILENAME) \
+                -e JWT_SECRET=$(JWT_SECRET) \
+                -e FRONTEND_URL=$(FRONTEND_URL) \
+                $(REPOSITORY)/$(TARGET):$(DOCKERTAG)
 
 deploy:
 	ansible-playbook deployments/ansible/deploy.yml -vv 
