@@ -171,10 +171,14 @@ async function importArticles() {
     const cover = await checkFileExistsBeforeUpload([`${article.slug}.jpg`]);
     const updatedBlocks = await updateBlocks(article.blocks);
 
+    const { latitude, longitude, ...rest } = article;
+
     await createEntry({
       model: 'article',
       entry: {
-        ...article,
+        ...rest,
+        latitude,
+        longitude,
         cover,
         blocks: updatedBlocks,
         // Make sure it's not a draft
